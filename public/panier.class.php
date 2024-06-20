@@ -52,5 +52,48 @@ class Panier
     public function remove($product_id) {
         unset($_SESSION['panier'][$product_id]);
     }
-}
 
+    // Method to get a unique ID for the cart session
+    public function getId() {
+        return session_id();
+    }
+
+    // panier.class.php
+
+    // panier.class.php
+
+    public function getProducts() {
+        $ids = array_keys($_SESSION['panier']);
+        if (empty($ids)) {
+            return [];
+        }
+
+        // Fetch product details from the database
+        $products = $this->DB->query('SELECT product_id, product_name AS name, price FROM products WHERE product_id IN (' . implode(',', $ids) . ')');
+
+        $result = [];
+        foreach ($products as $product) {
+            // Ensure $product is an object or array with expected keys
+            if (isset($_SESSION['panier'][$product['product_id']])) { // Check if product_id exists in session
+                $result[] = [
+                    'price_data' => [
+                        'currency' => 'eur', // Adjust as per your product's currency
+                        'product_data' => [
+                            'name' => $product['name'], // Access as array key
+                        ],
+                        'unit_amount' => $product['price'] * 100, // Amount in cents
+                    ],
+                    'quantity' => $_SESSION['panier'][$product['product_id']],
+                ];
+            }
+        }
+
+        return $result;
+    }
+    // Method to set the Stripe session ID in the cart
+    public function setSessionId($sessionId) {
+        $_SESSION['stripe_session_id'] = $sessionId;
+    }
+
+
+}
