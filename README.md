@@ -1,7 +1,6 @@
-Create a Cart Item in PHP
-Create a DATABASE named 'PRODUCTS'
-link database via PHP
-Create index.php and sub folder 
+Solution complète Panier et Paiement STRIPE
+utilise Tailwindcss
+
 
 ![Alt text](./public/assets/img/capture1.png "Optional title")
 
